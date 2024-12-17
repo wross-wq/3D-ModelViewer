@@ -6,6 +6,7 @@
     <title>Interactive 3D Model</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r152/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three/examples/js/loaders/GLTFLoader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@.152.2/examples/js/controls/OrbitControls.js"></script>
     <style>
         body {
             margin: 0;
@@ -20,14 +21,15 @@
     <script>
         //Set up the scene
         const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0x222222);
         const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        const renderer = new THREE.WebGLRenderer();
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
         renderer.setSize(window.innerWidth, window.innerHeight);
         document.body.appendChild(renderer.domElement);
 
         //Add Lighting
         const light = new THREE.DirectionalLight(0xffffff, 1);
-        light.position.set(5,5,5).normalize();
+        light.position.set(5, 5, 5).normalize();
         scene.add(light);
 
         //Load the 3D model
@@ -50,6 +52,37 @@
             camera.updateProjectionMatrix();
             renderer.setSize(window.innerWidth, window.innerHeight);
         });
+
+        let rotate = false;
+        document.getElementById('rotateButton').addEventListener('click', () => {
+            rotate = !rotate;
+        });
+
+        document.getElementById('resetButton').addEventListener('click', () => {
+            camera.position.set(0, 1.5, 3);
+            controls.reset();
+        });
+
+        const controls = new THREE.OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = true;
+        controls.dampingfactor = 0.1;
+
+        function animate() {
+            requestAnimationFrame(animate);
+
+            if (rotate && scene.children[0]) {
+                scene.children[0].rotation.y =+ 0.01;
+            }
+
+            if (mixer) mixer.update(0.016);
+            controls.update();
+            renderer.renderer(scene, camera);
+        }
+        animate();
     </script>
+    <div style="position: absolute; top: 10px; left: 10px;">
+        <button id="rotateButton">Rotate Model</button>
+        <button id="resetButton"> Reset View</button>
+    </div>
 </body>
 </html>
