@@ -59,32 +59,31 @@
   </div>
 
   <script>
-    console.log("Initializing 3D scene...");
+    console.log("✅ Initializing 3D scene...");
 
     // Scene setup
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x111111);
+    scene.background = new THREE.Color(0x111111); // Dark gray background
 
     // Camera setup
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
     camera.position.set(0, 1.5, 5);
-    console.log("Camera initialized.");
+    console.log("✅ Camera initialized.");
 
     // Renderer setup
     const renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
     document.body.appendChild(renderer.domElement);
-    console.log("Renderer initialized.");
+    console.log("✅ Renderer initialized.");
 
     // Lighting
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
     scene.add(ambientLight);
-
     const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
     directionalLight.position.set(5, 5, 5);
     scene.add(directionalLight);
 
-    // OrbitControls for interaction
+    // OrbitControls for interactivity
     const controls = new THREE.OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
     controls.dampingFactor = 0.05;
@@ -93,27 +92,34 @@
     const loadingSpinner = document.getElementById('loadingSpinner');
     const errorMessage = document.getElementById('errorMessage');
 
-    // GLTFLoader to load the 3D model
+    // GLTFLoader
     const loader = new THREE.GLTFLoader();
+    console.log("✅ GLTFLoader initialized.");
 
-    console.log("Before loader.load() call...");
-    loader.load(
-      'model.glb?cacheBust=' + Date.now(), // Prevent caching issues
-      function (gltf) {
-        console.log("✅ Model loaded successfully!");
-        scene.add(gltf.scene); // Add the model to the scene
-        loadingSpinner.style.display = 'none'; // Hide spinner
-      },
-      function (xhr) {
-        console.log(`🔄 Loading progress: ${(xhr.loaded / xhr.total * 100).toFixed(2)}%`);
-      },
-      function (error) {
-        console.error("❌ Error loading model:", error);
-        loadingSpinner.style.display = 'none'; // Hide spinner
-        errorMessage.style.display = 'flex';   // Show error message
-      }
-    );
-    console.log("After loader.load() call...");
+    console.log("⏳ Attempting to load model...");
+    try {
+      loader.load(
+        'model.glb?cacheBust=' + Date.now(), // Cache busting to prevent stale file
+        function (gltf) {
+          console.log("🎉 Model loaded successfully:", gltf);
+          scene.add(gltf.scene); // Add the loaded model to the scene
+          loadingSpinner.style.display = 'none'; // Hide the spinner
+        },
+        function (xhr) {
+          console.log(`🔄 Loading progress: ${(xhr.loaded / xhr.total * 100).toFixed(2)}%`);
+        },
+        function (error) {
+          console.error("❌ Error loading model:", error);
+          loadingSpinner.style.display = 'none';
+          errorMessage.style.display = 'flex';
+        }
+      );
+      console.log("✅ loader.load() called successfully.");
+    } catch (e) {
+      console.error("❌ Exception occurred during loader.load():", e);
+      loadingSpinner.style.display = 'none';
+      errorMessage.style.display = 'flex';
+    }
 
     // Resize handling
     window.addEventListener('resize', () => {
