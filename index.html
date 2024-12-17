@@ -87,20 +87,21 @@
     }, 10000); // 10,000 ms = 10 seconds
 
     loader.load(
-      'model.glb',
-      (gltf) => {
-        clearTimeout(loadTimeout); // Clear timeout when the model loads successfully
-        scene.add(gltf.scene);
-        hideSpinner();// Hide the loading spinner
-        console.log('Model loaded successfully');
-      },
-      undefined,
-      (error) => {
-        clearTimeout(loadTimeout); // Clear timeout and show error on failure
-        console.error('Error loading model:', error);
-        showError();
-      }
-    );
+  'model.glb',
+  function (gltf) {
+    console.log('Model loaded successfully:', gltf); // Log the loaded model data
+    clearTimeout(loadTimeout);                       // Clear timeout on success
+    scene.add(gltf.scene);                           // Add the model to the scene
+    hideSpinner();                                   // Hide the spinner
+  },
+  function (xhr) {
+    console.log(`Model loading progress: ${((xhr.loaded / xhr.total) * 100).toFixed(2)}%`);
+  },
+  function (error) {
+    console.error('Error loading the model:', error); // Log detailed error
+    showError();                                     // Show error screen
+  }
+);
 
     // Function to show error message
     function showError() {
