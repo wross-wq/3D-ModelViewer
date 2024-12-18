@@ -5,8 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>3D Model Viewer</title>
 
-  <!-- Load Three.js via ES Modules -->
+  <!-- Favicon Fix -->
+  <link rel="icon" href="data:,">
+  
+  <style>
+    body { margin: 0; overflow: hidden; background-color: #000; }
+    canvas { display: block; }
+  </style>
+</head>
+<body>
   <script type="module">
+    // Import Three.js and dependencies directly from a CDN
     import * as THREE from 'https://unpkg.com/three@0.152.0/build/three.module.js';
     import { GLTFLoader } from 'https://unpkg.com/three@0.152.0/examples/jsm/loaders/GLTFLoader.js';
     import { OrbitControls } from 'https://unpkg.com/three@0.152.0/examples/jsm/controls/OrbitControls.js';
@@ -31,21 +40,21 @@
     light.position.set(5, 5, 5);
     scene.add(light);
 
-    // OrbitControls for interactivity
+    // Controls
     const controls = new OrbitControls(camera, renderer.domElement);
 
-    // GLTFLoader for loading 3D models
+    // GLTFLoader to load 3D model
     const loader = new GLTFLoader();
     console.log("⏳ Loading model...");
 
     loader.load(
-      'model.glb', // Ensure the model.glb file is in the correct path
-      function (gltf) {
+      'model.glb', // Make sure model.glb is in the correct location
+      (gltf) => {
         console.log("🎉 Model loaded successfully!");
         scene.add(gltf.scene);
       },
       undefined,
-      function (error) {
+      (error) => {
         console.error("❌ Error loading model:", error);
       }
     );
@@ -58,18 +67,12 @@
     }
     animate();
 
-    // Resize handling
+    // Resize event
     window.addEventListener('resize', () => {
       camera.aspect = window.innerWidth / window.innerHeight;
       camera.updateProjectionMatrix();
       renderer.setSize(window.innerWidth, window.innerHeight);
     });
   </script>
-
-  <style>
-    body { margin: 0; overflow: hidden; background-color: #000; }
-    canvas { display: block; }
-  </style>
-</head>
-<body></body>
+</body>
 </html>
