@@ -5,12 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>3D Model Viewer</title>
 
-  <!-- Load Three.js FIRST -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r152/three.min.js" defer></script>
+  <!-- Load Three.js -->
+  <script src="https://cdn.jsdelivr.net/npm/three@0.152.0/build/three.min.js"></script>
 
   <!-- Load Dependencies AFTER Three.js -->
-  <script src="https://cdn.jsdelivr.net/npm/three@0.152.0/examples/js/loaders/GLTFLoader.js" defer></script>
-  <script src="https://cdn.jsdelivr.net/npm/three@0.152.0/examples/js/controls/OrbitControls.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.152.0/examples/js/loaders/GLTFLoader.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.152.0/examples/js/controls/OrbitControls.js"></script>
 
   <style>
     body { margin: 0; overflow: hidden; background-color: #000; }
@@ -21,12 +21,12 @@
   <script>
     console.log("🚀 Initializing 3D scene...");
 
-    // Check if THREE.js is loaded
+    // Verify if THREE.js is loaded
     if (typeof THREE === 'undefined') {
       console.error("❌ THREE.js failed to load.");
-      alert("Error: THREE.js is not loaded properly. Check your script tags.");
+      alert("THREE.js failed to load. Check your script sources.");
     } else {
-      console.log("✅ THREE.js is loaded!");
+      console.log("✅ THREE.js is loaded successfully!");
 
       // Scene setup
       const scene = new THREE.Scene();
@@ -42,16 +42,16 @@
       light.position.set(5, 5, 5);
       scene.add(light);
 
-      // OrbitControls
+      // Controls
       const controls = new THREE.OrbitControls(camera, renderer.domElement);
 
-      // Load the 3D model
+      // Load a GLTF model
       const loader = new THREE.GLTFLoader();
       loader.load('model.glb', (gltf) => {
         console.log("🎉 Model loaded successfully!");
         scene.add(gltf.scene);
       }, undefined, (error) => {
-        console.error("❌ Model failed to load:", error);
+        console.error("❌ Error loading model:", error);
       });
 
       // Animation loop
