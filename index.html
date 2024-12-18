@@ -7,7 +7,7 @@
 
   <!-- Favicon Fix -->
   <link rel="icon" href="data:,">
-  
+
   <style>
     body { margin: 0; overflow: hidden; background-color: #000; }
     canvas { display: block; }
@@ -15,7 +15,7 @@
 </head>
 <body>
   <script type="module">
-    // Import Three.js and dependencies directly from a CDN
+    // Import Three.js and its dependencies using absolute URLs from the CDN
     import * as THREE from 'https://unpkg.com/three@0.152.0/build/three.module.js';
     import { GLTFLoader } from 'https://unpkg.com/three@0.152.0/examples/jsm/loaders/GLTFLoader.js';
     import { OrbitControls } from 'https://unpkg.com/three@0.152.0/examples/jsm/controls/OrbitControls.js';
@@ -40,15 +40,15 @@
     light.position.set(5, 5, 5);
     scene.add(light);
 
-    // Controls
+    // OrbitControls for interactivity
     const controls = new OrbitControls(camera, renderer.domElement);
 
-    // GLTFLoader to load 3D model
+    // GLTFLoader for loading 3D models
     const loader = new GLTFLoader();
     console.log("⏳ Loading model...");
 
     loader.load(
-      'model.glb', // Make sure model.glb is in the correct location
+      'model.glb', // Path to the 3D model
       (gltf) => {
         console.log("🎉 Model loaded successfully!");
         scene.add(gltf.scene);
@@ -67,7 +67,7 @@
     }
     animate();
 
-    // Resize event
+    // Window resize handling
     window.addEventListener('resize', () => {
       camera.aspect = window.innerWidth / window.innerHeight;
       camera.updateProjectionMatrix();
